@@ -20,7 +20,13 @@ const MealsOverviewScreen: React.FC<TMealsOverviewScreen> = ({ navigation, route
 
     const renderMealItem = (itemData: ListRenderItemInfo<Meal>) => {
         return (
-            <MealItem title={itemData.item.title} />
+            <MealItem 
+            title={itemData.item.title} 
+            imageUrl={itemData.item.imageUrl}  
+            duration={itemData.item.duration}
+            complexity={itemData.item.complexity}
+            affordability={itemData.item.affordability}
+            />
         )
     }
 

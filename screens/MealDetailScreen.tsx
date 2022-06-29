@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React, { useLayoutEffect } from "react";
+import React, { useContext, useLayoutEffect } from "react";
 import {
   Text,
   View,
@@ -15,6 +15,7 @@ import Subtitle from "../components/MealDetail/Subtitle";
 import MealDetails from "../components/MealDetails";
 import { MEALS } from "../data/dummy-data";
 import Meal from "../models/meal";
+import { FavoritesContext } from "../store/context/favorites-context";
 
 type TMealsOverviewScreen = NativeStackScreenProps<
   StackParamList,
@@ -42,6 +43,8 @@ const MealDetailScreen: React.FC<TMealsOverviewScreen> = ({
   route,
 }) => {
   const { mealId } = route.params;
+  const { favoriteMealIds, addFavorite, removeFavorite } =
+    useContext(FavoritesContext);
 
   const pickedMeal = MEALS.find((item) => item.id === mealId) as Meal;
   const {
@@ -57,14 +60,25 @@ const MealDetailScreen: React.FC<TMealsOverviewScreen> = ({
   };
 
   const headerButtonPressHandler = () => {
-    console.log("Pressed");
+    if (favoriteMealIds.includes(mealId)) {
+      removeFavorite(mealId);
+    } else {
+      addFavorite(mealId);
+    }
   };
+
+  const mealIsFavorite = favoriteMealIds.includes(mealId);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => {
-        // return <Button title="Tap me" onPress={headerButtonPressHandler} />;
-        return <IconButton onPress={headerButtonPressHandler} />;
+        return (
+          <IconButton
+            colorProps={mealIsFavorite ? "yellow" : "white"}
+            iconProps={mealIsFavorite ? "star" : "star-outline"}
+            onPress={headerButtonPressHandler}
+          />
+        );
       },
     });
   }, [navigation, headerButtonPressHandler]);

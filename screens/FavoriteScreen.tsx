@@ -1,8 +1,9 @@
 import React from "react";
-import { Text } from "react-native";
+import { Text, View } from "react-native";
+import MealsList from "../components/MealList/MealsList";
 
 const FavoriteScreen = () => {
-  return <Text>The favorites screen!</Text>;
+  return <MealsList />;
 };
 
 export default FavoriteScreen;

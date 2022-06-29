@@ -10,8 +10,8 @@ import {
   StyleSheet,
   Platform,
 } from "react-native";
-import { StackParamList } from "../App";
-import MealDetails from "./MealDetails";
+import { StackParamList } from "../../App";
+import MealDetails from "../MealDetails";
 
 interface IMealItem {
   id: string;

@@ -1,7 +1,17 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React from "react";
-import { Text, View, StyleSheet, Image } from "react-native";
+import React, { useLayoutEffect } from "react";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  ScrollView,
+  Button,
+} from "react-native";
 import { StackParamList } from "../App";
+import IconButton from "../components/IconButton";
+import List from "../components/MealDetail/List";
+import Subtitle from "../components/MealDetail/Subtitle";
 import MealDetails from "../components/MealDetails";
 import { MEALS } from "../data/dummy-data";
 import Meal from "../models/meal";
@@ -46,8 +56,21 @@ const MealDetailScreen: React.FC<TMealsOverviewScreen> = ({
     ...pickedMeal,
   };
 
+  const headerButtonPressHandler = () => {
+    console.log("Pressed");
+  };
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => {
+        // return <Button title="Tap me" onPress={headerButtonPressHandler} />;
+        return <IconButton onPress={headerButtonPressHandler} />;
+      },
+    });
+  }, [navigation, headerButtonPressHandler]);
+
   return (
-    <View>
+    <ScrollView style={styles.rootView}>
       <Image style={styles.image} source={{ uri: imageUrl }} />
       <Text style={styles.title}>{title}</Text>
       <MealDetails
@@ -56,25 +79,24 @@ const MealDetailScreen: React.FC<TMealsOverviewScreen> = ({
         affordability={affordability}
         styleTextProps={styles.detailText}
       />
-      <View style={styles.subtitleContainer}>
-        <Text style={styles.subtitle}>Ingredients</Text>
+      <View style={styles.outerListContainer}>
+        <View style={styles.listContainer}>
+          <Subtitle>Ingredients</Subtitle>
+          <List arrayList={ingredients} />
+          <Subtitle>Steps</Subtitle>
+          <List arrayList={steps} />
+        </View>
       </View>
-      {ingredients.map((ingredient) => (
-        <Text key={ingredient}>{ingredient}</Text>
-      ))}
-      <View style={styles.subtitleContainer}>
-        <Text style={styles.subtitle}>Steps</Text>
-      </View>
-      {steps.map((step) => (
-        <Text key={step}>{step}</Text>
-      ))}
-    </View>
+    </ScrollView>
   );
 };
 
 export default MealDetailScreen;
 
 const styles = StyleSheet.create({
+  rootView: {
+    marginBottom: 32,
+  },
   image: {
     width: "100%",
     height: 350,
@@ -102,5 +124,11 @@ const styles = StyleSheet.create({
     padding: 6,
     borderBottomColor: "#d35309",
     borderBottomWidth: 2,
+  },
+  listContainer: {
+    width: "80%",
+  },
+  outerListContainer: {
+    alignItems: "center",
   },
 });

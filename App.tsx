@@ -1,5 +1,7 @@
+import "react-native-gesture-handler";
+
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Button } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -8,6 +10,9 @@ import CategoriesScreen from "./screens/CategoriesScreen";
 import MealsOverviewScreen from "./screens/MealsOverviewScreen";
 import { CATEGORIES } from "./data/dummy-data";
 import MealDetailScreen from "./screens/MealDetailScreen";
+
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import FavoriteScreen from "./screens/FavoriteScreen";
 
 /**
  * screenOptions: for all pages
@@ -18,7 +23,7 @@ import MealDetailScreen from "./screens/MealDetailScreen";
  */
 
 export type StackParamList = {
-  MealsCategories: undefined;
+  DrawerScreen: undefined;
   MealsOverview: {
     categoryId: string;
   };
@@ -27,7 +32,44 @@ export type StackParamList = {
   };
 };
 
+export type DrawerParamList = {
+  Categories: undefined;
+  Favorites: undefined;
+};
+
 const Stack = createNativeStackNavigator<StackParamList>();
+const Drawer = createDrawerNavigator<DrawerParamList>();
+
+const DrawerNavigator = () => {
+  return (
+    <Drawer.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: "#ddaf94",
+        },
+        headerTintColor: "white",
+        sceneContainerStyle: {
+          backgroundColor: "#926952",
+        },
+        drawerContentStyle: {
+          backgroundColor: "#ddaf94",
+        },
+        drawerInactiveTintColor: "white",
+        drawerActiveBackgroundColor: "#d88453",
+        drawerActiveTintColor: "#d4540a",
+      }}
+    >
+      <Drawer.Screen
+        name="Categories"
+        component={CategoriesScreen}
+        options={{
+          title: "All Categories",
+        }}
+      />
+      <Drawer.Screen name="Favorites" component={FavoriteScreen} />
+    </Drawer.Navigator>
+  );
+};
 
 export default function App() {
   return (
@@ -35,7 +77,7 @@ export default function App() {
       <StatusBar style="light" />
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="MealsCategories"
+          initialRouteName="DrawerScreen"
           screenOptions={{
             headerStyle: {
               backgroundColor: "#ddaf94",
@@ -47,34 +89,20 @@ export default function App() {
           }}
         >
           <Stack.Screen
-            name="MealsCategories"
-            component={CategoriesScreen}
+            name="DrawerScreen"
+            component={DrawerNavigator}
             options={{
-              title: "All Categories",
-              // headerStyle: {
-              //   backgroundColor: "#ddaf94",
-              // },
-              // headerTintColor: "white",
-              // contentStyle: {
-              //   backgroundColor: "#a08a7d",
-              // },
+              headerShown: false,
             }}
           />
+          <Stack.Screen name="MealsOverview" component={MealsOverviewScreen} />
           <Stack.Screen
-            name="MealsOverview"
-            component={MealsOverviewScreen}
-            // options={({ navigation, route }) => {
-            //   const { categoryId } = route.params;
-            //   const category = CATEGORIES.find(
-            //     (item) => item.id === categoryId
-            //   );
-
-            //   return {
-            //     title: category?.title,
-            //   };
-            // }}
+            name="MealDetail"
+            component={MealDetailScreen}
+            options={{
+              title: "About the meal",
+            }}
           />
-          <Stack.Screen name="MealDetail" component={MealDetailScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </>

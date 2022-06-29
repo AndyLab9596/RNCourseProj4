@@ -10,7 +10,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 //     navigation: NavigationProp<StackParamList, 'MealsCategories'>
 // }
 
-type TICategoriesScreen = NativeStackScreenProps<StackParamList, 'MealsCategories'>
+type TICategoriesScreen = NativeStackScreenProps<StackParamList, 'DrawerScreen'>
 
 const CategoriesScreen: React.FC<TICategoriesScreen> = ({ navigation }) => {
 
